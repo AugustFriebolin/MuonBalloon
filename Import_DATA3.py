@@ -5,6 +5,7 @@ import signal
 from datetime import datetime
 from multiprocessing import Process
 
+
 #import numpy as np
 import tornado.httpserver
 import tornado.websocket
@@ -203,7 +204,7 @@ for i in range(nDetectors):
 	print('\t['+str(ArduinoPort[i])+']' +port_name_list[i])
 
 
-if mode == 1:
+if mode == 1: #We are going to edit this so it creates a purely binary file and then decode in a separate function
 	cwd = os.getcwd()
 	fname = input("Enter file name (default: "+cwd+"/CW_data.txt):")
 
@@ -224,7 +225,7 @@ if mode == 1:
 		globals()['Det%s' % str(i)].stopbits = 1 
 
 		time.sleep(1)
-		#globals()['Det%s' % str(i)].write('write')  
+		globals()['Det%s' % str(i)].write(')  
 
 		counter = 0
 
@@ -256,12 +257,12 @@ if mode == 1:
 		detector_name_list.append(det_name)    # Wait and read data 
 
 
-	file = open(fname, "w")
-	file.write(header1.decode())
-	file.write(header2.decode())
-	file.write(header3.decode())
-	file.write(header4.decode())
-	file.write(header5.decode())
+	file = open(fname, "wb")
+	#file.write(header1.decode())
+	#file.write(header2.decode())
+	#file.write(header3.decode())
+	#file.write(header4.decode())
+	#file.write(header5.decode())
 
 	string_of_names = ''
 	print("\n-- Detector Names --")
@@ -285,8 +286,8 @@ if mode == 1:
 		string_of_names+=detector_name_list[0]
 
 	#print(string_of_names)
-	file.write('Device ID(s): '+string_of_names)
-	file.write('\n')
+	#file.write('Device ID(s): '+string_of_names)
+	#file.write('\n')
 	#detector_name = ComPort.readline()    # Wait and read data 
 	#file.write("Device ID: "+str(detector_name))
 
@@ -295,8 +296,11 @@ if mode == 1:
 			if globals()['Det%s' % str(i)].inWaiting():
 				#data = globals()['Det%s' % str(i)].readline().replace(
 				# '\r\n','')    # Wait and read data
-				data = globals()['Det%s' % str(i)].readline().decode().strip()	# Wait and read data
-				file.write(str(datetime.now())+" "+data+" "+detector_name_list[i]+'\n')
+				#data = globals()['Det%s' % str(i)].readline().decode().strip()	# Wait and read data
+				#file.write(str(datetime.now())+" "+data+" "+detector_name_list[i]+'\n')
+				data = globals()['Det%s' % str(i)].readline().strip()	# Wait and read data
+				file.write(data+'\n')
+				
 				globals()['Det%s' % str(i)].write(str.encode('got-it'))
 
 	for i in range(nDetectors):
@@ -342,7 +346,7 @@ if mode == 2:
 			    fname = dir_path + '/' + data.split(' ')[-1].split('.txt')[0]+'.txt'
 			    
 			    print("Saving to: "+ fname)
-			    file = open(fname, "w",0)
+			    file = open(fname, "wb",0)
 			    counter = 0
 
 
