@@ -295,7 +295,7 @@ if mode == 1: #We are going to edit this so it creates a purely binary file and 
 	#file.write('\n')
 	#detector_name = ComPort.readline()    # Wait and read data 
 	#file.write("Device ID: "+str(detector_name))
-    StopData = False
+	StopData = False
 	while not StopData:
 		for i in range(nDetectors):
 			if globals()['Det%s' % str(i)].inWaiting():
@@ -307,7 +307,7 @@ if mode == 1: #We are going to edit this so it creates a purely binary file and 
 				file.write(data+'\n')
 				
 				globals()['Det%s' % str(i)].write(str.encode('got-it'))
-        response = input("Type 'stop' to stop taking data").lower()
+				response = input("Type 'stop' to stop taking data").lower()
 		if( response == "stop"):
             StopData= True
 	for i in range(nDetectors):
@@ -434,3 +434,4 @@ if mode == 4:
     scheduler.start()
     #start the loop
     mainLoop.start()
+
